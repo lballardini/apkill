@@ -47,7 +47,7 @@ sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
 echo "Choose Channel:"
 read chan
 echo "Please wait.. monitor mode is being enabled.."
-trap 'airmon-ng stop $inter\mon > nul && echo "deactivating monitor mode.." && exit 1' INT
+trap 'echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > nul && exit 1' INT
 sudo airmon-ng start $inter $chan > nul
 echo "MAC of Access-Points:"
 read macacc
