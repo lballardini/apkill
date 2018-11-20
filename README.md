@@ -1,4 +1,4 @@
-# apkill
+# ApKill
 Script for Aircrack-ng that makes deauthing clients from WiFi simple and fast.
 
 The script is optimized for debianesque systems. If you are on a system with Aptitude installed, dependecies will be automatically installed during first run. (For more information about dependencies view the first lines of the script.) 
