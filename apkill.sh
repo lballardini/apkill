@@ -5,6 +5,7 @@ if [ ! -f '/etc/apt' ]
 then
 echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
 echo "checking for dependencies.."
+fi
 if [ ! -f '/usr/local/bin/aircrack-ng' ]
 then
 echo "loading aircrack.."
@@ -20,7 +21,7 @@ then
 echo "loading net-tools.."
 sudo apt install net-tools -y > nul
 fi
-echo "dependecie check done.."
+echo "dependency check done.."
 echo "."
 echo "."
 #end of dependencie check
