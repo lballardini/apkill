@@ -49,7 +49,7 @@ read chan
 echo "Please wait.. monitor mode is being enabled.."
 trap 'echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > nul && exit 1' INT
 sudo airmon-ng start $inter $chan > nul
-echo "MAC of Access-Points:"
+echo "MAC of Access-Point:"
 read macacc
 echo "loading attack..."
 tput setaf 1
