@@ -20,7 +20,7 @@ then
 echo "loading net-tools.."
 sudo apt install net-tools -y > nul
 fi
-echo "dependecie check done.." && clear
+echo "dependency check done.." && clear
 #end of dependencie check
 #artwork
 tput setaf 1
