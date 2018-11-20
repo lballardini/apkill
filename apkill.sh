@@ -3,7 +3,7 @@
 
 if [ ! -f '/etc/apt' ]
 then
-echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits.
+echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
 echo "checking for dependencies.."
 if [ ! -f '/usr/local/bin/aircrack-ng' ]
 then
