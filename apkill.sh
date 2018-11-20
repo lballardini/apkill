@@ -35,7 +35,7 @@ echo " / /_________/\ \ \  / / /      / / /  \ \ \   ___/ / /__  / /_/_/ ___/\ /
 echo "/ / /_       __\ \_\/ / /      / / /    \ \ \ /\__\/_/___\/_______/\__\//_______/\__\/ "
 echo "\_\___\     /____/_/\/_/       \/_/      \_\_\\/_________/\_______\/    \_______\/     "
 echo "		The Wireless Jammer Script for debianesque Systems	"
-echo "								"
+echo "								                                        "
 tput sgr0
 #end of artwork
 iwconfig
