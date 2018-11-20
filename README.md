@@ -10,3 +10,5 @@ chmod +x apkill.sh && ./apkill.sh
 
 Non Debian: 
 Check source and edit the few bits that need to be changed. All systems that are somewhat similiar Distros to Debian work as well.
+
+WARNING: Please Check your local laws - never mess with APs you're not allowed to.
