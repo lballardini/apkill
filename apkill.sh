@@ -1,6 +1,6 @@
 #Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks. 
 #Dependencies: net-tools, egrep, aircrack-ng
-if [ ! -f '/etc/apt' ]
+if [ ! -d '/etc/apt' ]
 then
 echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
 echo "checking for dependencies.."
