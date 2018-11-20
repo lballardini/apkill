@@ -3,8 +3,8 @@
 if [ ! -d '/etc/apt' ]
 then
 echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
-echo "checking for dependencies.."
 fi
+echo "checking for dependencies.."
 if [ ! -f '/usr/bin/aircrack-ng' ]
 then
 echo "loading aircrack.."
@@ -47,7 +47,7 @@ sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
 echo "Choose Channel:"
 read chan
 echo "Please wait.. monitor mode is being enabled.."
-trap 'airmon-ng stop $inter\mon > nul && exit 1' INT
+trap 'airmon-ng stop $inter\mon > nul && echo "deactivating monitor mode.." && exit 1' INT
 sudo airmon-ng start $inter $chan > nul
 echo "MAC of Access-Points:"
 read macacc
