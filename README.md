@@ -12,7 +12,7 @@ chmod +x apkill.sh && ./apkill.sh
 
 Load and run with one line: 
 
-sudo apt install git -y && cd ~/ && git clone https://github.com/deadport/apkill && cd apkill && chmod +x apkill.sh && ./apkill.sh
+sudo apt install git && cd ~/ && git clone https://github.com/deadport/apkill && cd apkill && chmod +x apkill.sh && ./apkill.sh
 
 Non Debian: 
 Check source and edit the few bits that need to be changed. All systems that are somewhat similiar Distros to Debian work as well.
