@@ -1,7 +1,8 @@
 #!/bin/bash
 # https://github.com/deadport/apkill
-# Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks. 
+# Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
 # Dependencies: net-tools, egrep, aircrack-ng
+chan=0
 if [ ! -d '/etc/apt' ]
 then
 echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
@@ -95,21 +96,19 @@ h:
 echo "How long to scan? [sec]:"
 read secs
 echo "scanning.. [$secs sec]"
-{ sudo airodump-ng $inter\mon 2>> temp.txt; } &
-PID=$! > /dev/null
-sleep $secs
-kill -TERM $PID > /dev/null
-sudo airmon-ng stop $inter\mon > /dev/null
-clear
+sleep 4
+sudo timeout --kill-after=$secs --foreground $secs airodump-ng $inter\mon &>> temp.txt
 clear
 echo "Hidden APs are:"
 echo "	"
-cat temp.txt | grep length | uniq --check-chars=18
+echo "evaluating scan..." && cat temp.txt | grep length | uniq --check-chars=18
 if [ -f 'temp.txt' ]
 then
 echo "scan successfull"
 else
 echo "scan error"
 fi
-sudo rm temp.txt > /dev/null
+sudo airmon-ng stop $inter\mon > /dev/null
+sleep 1
+sudo rm temp.txt
 exit 0
