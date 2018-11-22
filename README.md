@@ -10,7 +10,7 @@ INSTALLATION:
 Just mark the script as executable and run it. 
 chmod +x apkill.sh && ./apkill.sh
 
-Download and run in one line: cd ~/ && git clone https://github.com/deadport/apkill && cd apkill && chmod +x && ./apkill.sh
+Load n run in one line: cd ~/ && git clone https://github.com/deadport/apkill && cd apkill && chmod +x apkill.sh && ./apkill.sh
 
 Non Debian: 
 Check source and edit the few bits that need to be changed. All systems that are somewhat similiar Distros to Debian work as well.
