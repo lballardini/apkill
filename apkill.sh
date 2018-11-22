@@ -61,12 +61,12 @@ read inter
 clear
 echo "scanning networks.."
 sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
-echo "Choose Channel:"
+echo "Choose Channel: (can be ignored if searching for hidden AP)"
 read chan
 echo "Please wait.. monitor mode is being enabled.."
 trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > /dev/null && exit 1' INT
 sudo airmon-ng start $inter $chan > /dev/null
-echo "MAC of Access-Point:"
+echo "MAC of Access-Point: (can be ignored if searching for hidden AP)"
 read macacc
 echo "loading attack..."
 tput setaf 1
@@ -92,5 +92,24 @@ sudo airmon-ng stop $inter\mon > /dev/null
 tput sgr0
 exit 0
 h:
-echo "test2 succeeded"
+echo "How long to scan? [sec]:"
+read secs
+echo "scanning.. [$secs sec]"
+{ sudo airodump-ng $inter\mon 2>> temp.txt; } &
+PID=$! > /dev/null
+sleep $secs
+kill -TERM $PID > /dev/null
+sudo airmon-ng stop $inter\mon > /dev/null
+clear
+clear
+echo "Hidden APs are:"
+echo "	"
+cat temp.txt | grep length | uniq --check-chars=18
+if [ -f 'temp.txt' ]
+then
+echo "scan successfull"
+else
+echo "scan error"
+fi
+sudo rm temp.txt > /dev/null
 exit 0
