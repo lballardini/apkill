@@ -11,6 +11,7 @@ Just mark the script as executable and run it.
 chmod +x apkill.sh && ./apkill.sh
 
 Load and run with one line: 
+
 cd ~/ && git clone https://github.com/deadport/apkill && cd apkill && chmod +x apkill.sh && ./apkill.sh
 
 Non Debian: 
