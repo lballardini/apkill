@@ -52,7 +52,7 @@ echo "								                                        "
 tput sgr0
 #end of artwork
 #opt
-echo "Choose an attack option[single client(c) whole AP(a) find hidden(h)]:"
+echo "Choose an attack option [single client(c) whole AP(a) find hidden(h)]:"
 read ask
 #opt end
 iwconfig
