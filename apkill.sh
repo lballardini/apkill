@@ -100,8 +100,8 @@ sleep 4
 sudo timeout --kill-after=$secs --foreground $secs airodump-ng $inter\mon &>> temp.txt
 clear
 echo "Hidden APs are:"
-echo "	"
 echo "evaluating scan..." && cat temp.txt | grep length | uniq --check-chars=18
+echo "	"
 if [ -f 'temp.txt' ]
 then
 echo "scan successfull"
