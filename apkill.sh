@@ -101,10 +101,12 @@ if [ $ask -eq 3 ]
 	then
 		echo "How long to scan? [sec]:"
 		read secs
+		tput setaf 1
 		echo "scanning.. [$secs sec]"
 		sleep 4
 		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $inter\mon &>> temp.txt
 		clear
+		tput sgr0
 		echo "Hidden APs are:"
 		echo "evaluating scan..." && cat temp.txt | grep length | uniq --check-chars=18
 		echo "	"
