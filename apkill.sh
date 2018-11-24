@@ -2,6 +2,8 @@
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
 # Dependencies: net-tools, egrep, aircrack-ng
+sudo service wireless-manager stop
+sudo service wireless-manager start
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
@@ -104,6 +106,7 @@ if [ $ask -eq 3 ]
 		tput setaf 1
 		echo "scanning.. [$secs sec]"
 		sleep 4
+		sudo airmon-ng start $inter $chan > /dev/null
 		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $inter\mon &>> temp.txt
 		clear
 		tput sgr0
