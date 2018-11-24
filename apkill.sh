@@ -2,8 +2,6 @@
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
 # Dependencies: net-tools, egrep, aircrack-ng
-sudo service wireless-manager stop
-sudo service wireless-manager start
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
