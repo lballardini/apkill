@@ -1,5 +1,5 @@
 # ApKill
-Script for Aircrack-ng that makes deauthing clients from WiFi simple and fast.
+Script for Aircrack-ng that makes deauthing clients + capturing handshakes from WiFi simple and fast.
 
 FUNCTIONALITIES: Deauth single client, deauth all clients, find hidden AP
 
