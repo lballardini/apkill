@@ -2,6 +2,7 @@
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
 # Dependencies: net-tools, egrep, aircrack-ng
+#dependency check
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
