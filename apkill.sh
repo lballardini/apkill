@@ -171,8 +171,6 @@ if [ $ask -eq 4 ]
 fi
 if [ $ask -eq 5 ]
 	then 
-		pass=0
-		essid=0
 		online=1
 		echo "To successfully perform this attack you must be connected to the destination AP!"
 		echo "Your Hostname is:"
