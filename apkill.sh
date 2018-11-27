@@ -51,8 +51,8 @@ tput sgr0
 #artwork end
 #opt
 echo "     		 	Choose an attack option:							"
-echo "[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
-echo "[DHCP pool flooding attack (5)					]"
+echo "	[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
+echo "	[DHCP pool flooding attack (5)					]"
 echo "	"
 echo "	"
 echo "	"
