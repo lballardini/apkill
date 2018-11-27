@@ -28,7 +28,7 @@ fi
 if [ ! -d '/etc/macchanger' ]
 	then
 		echo "loading macchanger.."
-		echo -en "\n\n" | sudo apt install macchanger -y > /dev/null
+		sudo apt install macchanger -y
 fi
 echo "dependency check done.." && clear
 #end of dependencie check 
