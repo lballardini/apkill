@@ -28,7 +28,7 @@ fi
 if [ ! -d '/etc/macchanger' ]
 	then
 		echo "loading macchanger.."
-		sudo apt install macchanger -y > /dev/null
+		echo -en "\n\n" | sudo apt install macchanger -y > /dev/null
 fi
 echo "dependency check done.." && clear
 #end of dependencie check 
@@ -155,7 +155,7 @@ if [ $ask -eq 4 ]
 				trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
 				sudo besside-ng $monitor
 				tput sgr0
-		else
+			else
 				tput setaf 1
 				sudo iwlist $inter scan | egrep 'Address|ESSID|Channel|Quality'
 				echo "choose AP MAC:"
