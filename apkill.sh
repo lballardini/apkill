@@ -53,6 +53,9 @@ tput sgr0
 echo "     		 	Choose an attack option:							"
 echo "[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
 echo "[DHCP pool flooding attack (5)					]"
+echo "	"
+echo "	"
+echo "	"
 echo "Choose [1-5]:" && read ask
 if [ $ask -gt 5 ] || [ $ask -lt 1 ]
 	then
