@@ -194,7 +194,7 @@ if [ $ask -eq 5 ]
 				sudo dhclient $inter
 				sleep 2
 				#check online start 
-				ping $gate -c 1 > /dev/null
+				ping -c 1 $gate > /dev/null
 				if [ $? -eq 1 ]
 					then
 						online=0
