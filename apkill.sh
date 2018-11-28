@@ -52,7 +52,7 @@ tput sgr0
 #opt
 echo "     		 	Choose an attack option:							"
 echo "	[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
-echo "	[DHCP pool flooding attack (5)					]"
+echo "	[DHCP starvation attack (5)					]"
 echo "	"
 echo "	"
 echo "	"
