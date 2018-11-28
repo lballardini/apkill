@@ -2,7 +2,7 @@
 Script for Aircrack-ng that makes deauthing clients + capturing handshakes from WiFi + DHCP pool flooding simple and fast.
 
 FUNCTIONALITIES: Deauth single client, deauth all clients, find hidden AP, catch specific handshake, catch all handshakes,    
-                 flood victims dhcp pool
+                 flood victims dhcp pool (dhcp starvation attack)
 
 The script is optimized for debianesque systems. If you are on a system with APT installed, dependecies will be automatically installed during first run. (For more information about dependencies view the first lines of the script.) 
 
