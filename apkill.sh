@@ -175,12 +175,8 @@ fi
 if [ $ask -eq 5 ]
 	then 
 		cnt=0
-    online=1
+   		online=1
 		echo "To successfully perform this attack you must be connected to the destination AP!"
-		echo "Your Hostname is:"
-		hostname
-		echo "..you should always be carefull.."
-		echo "	"
 		tput setaf 1
 		gate=$(/sbin/ip route | awk '/default/ { print $3 }')
 		#start dhcp pool flooding
