@@ -1,5 +1,5 @@
 # ApKill
-Script for Aircrack-ng that makes deauthing clients + capturing handshakes from WiFi + DHCP pool flooding simple and fast.
+Script for Aircrack-ng that makes deauthing clients + capturing handshakes from WiFi + DHCP starvation simple and fast.
 
 FUNCTIONALITIES: Deauth single client, deauth all clients, find hidden AP, catch specific handshake, catch all handshakes,    
                  flood victims dhcp pool (dhcp starvation attack)
