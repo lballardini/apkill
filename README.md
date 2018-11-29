@@ -21,7 +21,7 @@ Check source and edit the few bits that need to be changed. All systems that are
 WARNING: Please check your local laws - never mess with devices you're not allowed to.
 
 DHCP starvation attack may not work with some sticks or chipsets. While nearly every common PCI network card should work, some sticks have
-trouble being fast enough. Until this can (maybe) be patched, there will be a list of sticks and cards that are known to cause such problems:
+trouble being fast enough. Until this (maybe) can be patched, there will be a list of sticks and cards that are known to cause such problems:
 (please contribute your findings.)
 
 AVM FritzWLAN v2 - can be used in all attacks but dhcp starvation 
