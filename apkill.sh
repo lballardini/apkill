@@ -23,7 +23,7 @@ fi
 if [ ! -f '/sbin/iwlist' ]
 	then
 		echo "loading net-tools.."
-		sudo apt install net-tools -y > /dev/null
+		sudo apt install net-tools iw -y > /dev/null
 fi
 if [ ! -d '/etc/macchanger' ]
 	then
