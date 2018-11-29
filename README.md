@@ -24,6 +24,6 @@ DHCP starvation attack may not work with some sticks or chipsets. While nearly e
 trouble being fast enough. Until this (maybe) can be patched, there will be a list of sticks and cards that are known to cause such problems:
 (please contribute your findings.)
 
-AVM FritzWLAN v2 - can be used in all attacks but dhcp starvation 
+AVM FritzWLAN v2 - can be used in all attacks but dhcp starvation (reconnect after restart too slow with current driver)  
 
 
