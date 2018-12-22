@@ -3,7 +3,17 @@
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
 # Dependencies: net-tools, egrep, aircrack-ng, macchanger, curl
 
-#dependency check 
+#Online check function
+check_online()
+{
+online_stat=0
+ping -w 2 -c 1 8.8.8.8 > /dev/null
+if [ $? -lt 1 ]
+then
+    	online_stat=1
+fi
+}
+#Dependency check
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
@@ -17,7 +27,7 @@ if [ ! -f '/usr/bin/aircrack-ng' ]
 fi
 if [ ! -f '/usr/bin/curl' ]
 	then
-		echo "loading curl"
+		echo "loading curl.."
 		sudo apt install curl -y > /dev/null
 fi
 if [ ! -f '/bin/egrep' ]
@@ -36,11 +46,11 @@ if [ ! -d '/etc/macchanger' ]
 		sudo apt install macchanger -y
 fi
 echo "dependency check done.." && clear
-#end of dependencie check 
+#end of dependencie check
 clear
 #artwork
 tput setaf 1
-echo "        / /\                /\ \       /\_\            /\ \       _\ \          _\ \   " 
+echo "        / /\                /\ \       /\_\            /\ \       _\ \          _\ \   "
 echo "       / /  \              /  \ \     / / /  _         \ \ \     /\__ \        /\__ \  "
 echo "      / / /\ \            / /\ \ \   / / /  /\_\       /\ \_\   / /_ \_\      / /_ \_\ "
 echo "     / / /\ \ \          / / /\ \_\ / / /__/ / /      / /\/_/  / / /\/_/     / / /\/_/ "
@@ -117,8 +127,12 @@ while [ $ask -eq 1 ]
 		while [ $vendor = y ]
 		do
 			read clientmac
+			check_online > /dev/null
+			if [ $online_stat = 1 ]
+			then
 			echo "Gathering vendor information.."
 			curl "https://api.macvendors.com/$clientmac" && echo \n
+			fi
 			echo "Do you want to choose this client? [n/y]" 
 			read vendor
 			if [ $vendor = y ] || [ $vendor = Y ]
@@ -190,7 +204,7 @@ if [ $ask -eq 4 ]
 		sudo airmon-ng stop $monitor > /dev/null
 fi
 if [ $ask -eq 5 ]
-	then 
+	then
 		cnt=0
    		online=1
 		echo "To successfully perform this attack you must be connected to the destination AP!"
@@ -207,7 +221,7 @@ if [ $ask -eq 5 ]
 				sudo ifconfig $inter down && sleep 2
 				sudo ip addr flush dev $inter
 				sudo macchanger -a $inter
-				sudo ifconfig $inter up 
+				sudo ifconfig $inter up
 				sleep 4
 				sudo dhclient -1 $inter
 				if [ $? -eq 2 ]
