@@ -72,7 +72,7 @@ echo "	"
 echo "	"
 echo "	"
 echo "Choose [1-5]:" && read ask
-if [ $ask -gt 5 ] || [ $ask -lt 1 ]
+if [ $ask -gt 5 ] || [ $ask -lt 1 ]		##Check
 	then
 		tput setaf 1
 		echo "This option does not exist!"
@@ -144,7 +144,6 @@ while [ $ask -eq 1 ]
 			fi
 		done
 	done
-fi
 if [ $ask -eq 3 ]
 	then
 		echo "How long to scan? [sec]:"
