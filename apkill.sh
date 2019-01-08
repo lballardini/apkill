@@ -246,8 +246,10 @@ if [ $ask -eq 5 ]
 fi
 if [ $ask -eq 6 ]
 	then
+		echo "Interface name in monitor mode?: "
+		read monitor
 		echo "Please wait.. monitor mode is being enabled.."
-		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null & sleep 1 & exit 1' INT
 		sudo airmon-ng start $inter > /dev/null
 		echo "How long should be searched for WPS? [sec]:"
 		read secs
