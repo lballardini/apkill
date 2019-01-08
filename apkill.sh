@@ -77,7 +77,7 @@ echo "	"
 echo "	"
 echo "	"
 echo "Choose [1-5]:" && read ask
-if [ $ask -gt 5 ] || [ $ask -lt 1 ]		##Check
+if [ $ask -gt 6 ] || [ $ask -lt 1 ]		##Check
 	then
 		tput setaf 1
 		echo "This option does not exist!"
@@ -89,7 +89,7 @@ fi
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
-if [ $ask -lt 5 ]
+if [ $ask -eq 5 ]
 	then
 		echo "Interface name in Monitor Mode?:"
 		read monitor
