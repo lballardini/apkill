@@ -89,7 +89,7 @@ fi
 iwconfig
 echo "Interface name(e.g. wlan0):"
 read inter
-if [ $ask -eq 5 ]
+if [ $ask -lt 5 ]
 	then
 		echo "Interface name in Monitor Mode?:"
 		read monitor
