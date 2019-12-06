@@ -17,7 +17,9 @@ fi
 chan=0
 if [ ! -d '/etc/apt' ]
 	then
-		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits." && sleep 20
+		echo "WARNING:You appear to not be using a debianesque System! Please review the script to change the needed bits." && sleep 3
+		echo "This might work flawlessly, you'll just need to install dependencies manually!"
+		echo "proceeding... " && sleep 6
 fi
 echo "checking for dependencies.. please wait"
 if [ ! -f '/usr/bin/reaver' ]
